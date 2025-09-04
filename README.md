@@ -1,6 +1,6 @@
 # 1. クローン
 ```
-git clone https://github.com/koromo1515/dotfiles.git ~/dotfiles <br>
+git clone https://github.com/koromo1515/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
 # 2. 権限付与
