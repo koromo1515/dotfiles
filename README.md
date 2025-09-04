@@ -1,5 +1,5 @@
 # 1. クローン
-git clone https://github.com/koromo1515/dotfiles.git ~/dotfiles
+git clone https://github.com/koromo1515/dotfiles.git ~/dotfiles /n
 cd ~/dotfiles
 
 # 2. 権限付与
