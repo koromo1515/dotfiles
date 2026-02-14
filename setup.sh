@@ -155,6 +155,43 @@ setup_bottom() {
     ok "bottom (btm) installed"
 }
 
+# --- WezTerm config ---
+setup_wezterm() {
+    if [[ -f "$DOTFILES_DIR/wezterm/wezterm.lua" ]]; then
+        info "Setting up WezTerm config..."
+        mkdir -p "$HOME/.config/wezterm"
+        if [[ -f "$HOME/.config/wezterm/wezterm.lua" ]] && [[ ! -L "$HOME/.config/wezterm/wezterm.lua" ]]; then
+            local backup="$HOME/.config/wezterm/wezterm.lua.bak.$(date +%Y%m%d%H%M%S)"
+            cp "$HOME/.config/wezterm/wezterm.lua" "$backup"
+            warn "Existing WezTerm config backed up to $backup"
+        fi
+        ln -sf "$DOTFILES_DIR/wezterm/wezterm.lua" "$HOME/.config/wezterm/wezterm.lua"
+        ok "wezterm.lua symlinked"
+    else
+        warn "wezterm/wezterm.lua not found, skipping"
+    fi
+}
+
+# --- yewtube (YouTube CLI) ---
+setup_yewtube() {
+    if has yt; then
+        ok "yewtube already installed"
+        return
+    fi
+    info "Installing yewtube..."
+    if ! has pip && ! has pip3; then
+        curl -sS https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
+        python3 /tmp/get-pip.py --user --break-system-packages > /dev/null 2>&1
+    fi
+    local pip_cmd="${HOME}/.local/bin/pip"
+    if ! [[ -f "$pip_cmd" ]]; then pip_cmd="pip3"; fi
+    "$pip_cmd" install --user --break-system-packages yewtube > /dev/null 2>&1
+    ok "yewtube installed"
+    if ! has mpv; then
+        warn "mpv is required for video playback: sudo apt install mpv"
+    fi
+}
+
 # --- Install tmux plugins ---
 setup_tmux_plugins() {
     info "Installing tmux plugins via TPM..."
@@ -184,6 +221,8 @@ main() {
     setup_gitmux
     setup_mem_cpu_load
     setup_bottom
+    setup_wezterm
+    setup_yewtube
     setup_tmux_plugins
 
     echo ""
